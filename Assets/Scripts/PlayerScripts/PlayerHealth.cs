@@ -1,15 +1,13 @@
-using Unity.Mathematics;
 using UnityEngine;
 
-public class HealthSystem : MonoBehaviour
+public class PlayerHealth : MonoBehaviour
 {
     public float maxHealth = 100f;
     public float currentHealth;
 
-    void Start()
+    private void Start()
     {
         currentHealth = maxHealth;
-
     }
 
     public void TakeDamage(float amount)
@@ -19,8 +17,12 @@ public class HealthSystem : MonoBehaviour
 
         if (currentHealth <= 0)
         {
-            print("murio");
+            Debug.Log("¡El jugador ha sido derrotado!");
         }
     }
-    
+
+    public float GetHealthPercent()
+    {
+        return currentHealth / maxHealth;
+    }
 }

@@ -8,7 +8,6 @@ public class InputManager : MonoBehaviour
     public KeyCode upKey = KeyCode.UpArrow;
     public KeyCode downKey = KeyCode.DownArrow;
 
-
     void Update()
     {
         if (Input.GetKeyDown(leftKey)) CheckNote("left");
@@ -19,14 +18,21 @@ public class InputManager : MonoBehaviour
 
     void CheckNote(string dir)
     {
-        foreach (Note note  in new List<Note>(GameManager.instance.activeNotes))
+        bool hit = false;
+        foreach (Note note in new List<Note>(GameManager.instance.activeNotes))
         {
-            if (note != null && note.direction == dir && note.canBePressed)
+            if (note.direction == dir && note.canBePressed && !note.resolved)
             {
                 GameManager.instance.HitNote(note);
-                return;
+                hit = true;
+                break;
             }
         }
 
+        if (!hit)
+        {
+            Debug.Log("Fallaste la nota");
+            GameManager.instance.MissNote();
+        }
     }
 }

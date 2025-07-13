@@ -5,16 +5,16 @@ public class Note : MonoBehaviour
     public string direction;
     public float speed = 5f;
     public bool canBePressed = false;
-
     public float lifeTime = 5f;
     private float lifeTimer = 0f;
+    public bool resolved = false; // NUEVO: para evitar doble daño
 
     private void Update()
     {
         transform.position += Vector3.down * speed * Time.deltaTime;
 
         lifeTimer += Time.deltaTime;
-        if (lifeTimer >= lifeTime)
+        if (lifeTimer >= lifeTime && !resolved)
         {
             if (canBePressed && GameManager.instance != null)
             {
@@ -39,7 +39,7 @@ public class Note : MonoBehaviour
 
     private void OnTriggerExit2D(Collider2D collision)
     {
-        if (collision.CompareTag("HitZone"))
+        if (collision.CompareTag("HitZone") && !resolved)
         {
             if (canBePressed)
                 GameManager.instance?.MissNote();
