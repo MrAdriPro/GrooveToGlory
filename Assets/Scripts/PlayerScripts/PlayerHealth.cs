@@ -17,7 +17,7 @@ public class PlayerHealth : MonoBehaviour
 
         if (currentHealth <= 0)
         {
-            Debug.Log("¡El jugador ha sido derrotado!");
+            print("Player Died");
         }
     }
 

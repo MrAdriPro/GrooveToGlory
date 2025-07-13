@@ -18,7 +18,7 @@ public class Enemy : MonoBehaviour
 
         if (currentHealth <= 0)
         {
-            Debug.Log($"{data.enemyName} ha sido derrotado.");
+            Debug.Log($"{data.enemyName} murió");
         }
     }
 

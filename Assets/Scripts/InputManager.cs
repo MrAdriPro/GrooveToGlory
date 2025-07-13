@@ -3,10 +3,10 @@ using UnityEngine;
 
 public class InputManager : MonoBehaviour
 {
-    public KeyCode leftKey = KeyCode.LeftArrow;
-    public KeyCode rightKey = KeyCode.RightArrow;
-    public KeyCode upKey = KeyCode.UpArrow;
-    public KeyCode downKey = KeyCode.DownArrow;
+    public KeyCode leftKey = KeyCode.D;
+    public KeyCode rightKey = KeyCode.K;
+    public KeyCode upKey = KeyCode.J;
+    public KeyCode downKey = KeyCode.F;
 
     void Update()
     {

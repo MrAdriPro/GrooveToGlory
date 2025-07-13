@@ -1,6 +1,6 @@
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "EnemyData", menuName = "Enemy", order = 1)]
+[CreateAssetMenu(fileName = "Enemy", menuName = "Enemy", order = 1)]
 public class EnemyData : ScriptableObject
 {
     public string enemyName;
