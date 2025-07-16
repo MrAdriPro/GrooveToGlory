@@ -1,0 +1,22 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 68ece0860c0693c4aacc0b85b2ed4b93, type: 3}
+  m_Name: EnemyData
+  m_EditorClassIdentifier: 
+  enemyName: Diego
+  maxHealth: 1000
+  songData:
+  - {fileID: 11400000, guid: b0059fb0783308f41aa4beac3b397038, type: 2}
+  - {fileID: 11400000, guid: 356575de1dbe7e24094c4cc7c1aed74e, type: 2}
+  - {fileID: 11400000, guid: bf03487db631c4a4fad8194a4523cbb5, type: 2}
+  portrait: {fileID: 1604015474, guid: b631ed305dfd43c488e0f8edf5c829bc, type: 3}
+  zoomedSprite: {fileID: 1604015474, guid: b631ed305dfd43c488e0f8edf5c829bc, type: 3}
