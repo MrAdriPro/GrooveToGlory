@@ -14,6 +14,8 @@ public static class Tags
     public static string SPEED_TXT_TAG = "SpeedText";
     public static string CRITCHANCE_TXT_TAG = "CritChanceText";
 	public static string TEMPORAL_CONS_PARENT_TXT_TAG = "TemporalConsumibleParent";
+	public static string ENEMY = "Enemy";
+	public static string ENEMY_BODY_TAG = "EnemyBody";
 
 
 

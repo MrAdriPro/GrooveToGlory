@@ -25,7 +25,7 @@ public class EnemyHealth : MonoBehaviour
         {
             //Aqui imagino que tendremos que llamar a lo de que tire items y tal
             FightManager.instance.EndCombat();
-            Debug.Log($"{data.enemyName} defeated!");
+            Debug.Log($"{data.enemyType} defeated!");
         }
     }
     

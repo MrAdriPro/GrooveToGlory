@@ -8,6 +8,8 @@ TagManager:
   - Note
   - PlayerBody
   - MainCameraPivot
+  - Enemy
+  - EnemyBody
   layers:
   - Default
   - TransparentFX

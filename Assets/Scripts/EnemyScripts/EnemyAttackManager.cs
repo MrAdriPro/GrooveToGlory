@@ -1,0 +1,80 @@
+using System.Collections;
+using UnityEngine;
+using UnityEngine.UI;
+
+public class EnemyAttackManager : MonoBehaviour
+{
+
+    private NoteSpawner spawner;
+    
+
+    public void Initialize(NoteSpawner noteSpawner)
+    {
+        spawner = noteSpawner;
+    }
+    public void TriggerEnemyEffect()
+    {
+        switch (spawner.enemyData.enemyType)
+        {
+            case EnemyData.EnemyType.Skeleton:
+                LaunchBoneAttack();
+                break;
+            case EnemyData.EnemyType.Slime:
+                StartCoroutine(LaunchSlimeAttack());
+                break;
+            case EnemyData.EnemyType.Zombie:
+                LaunchZombieAttack();
+                break;
+
+        }
+    }
+
+    #region SpecialAttacks
+    void LaunchBoneAttack()
+    {
+        int randomLane = Random.Range(0, spawner.spawnPoints.Length);
+
+        if (spawner.boneNotePrefab != null && spawner.spawnPoints[randomLane] != null)
+        {
+            GameObject boneNote = Instantiate(spawner.boneNotePrefab, spawner.spawnPoints[randomLane].position, Quaternion.identity);
+
+            Note noteComponent = boneNote.GetComponent<Note>();
+            if (noteComponent != null)
+            {
+                noteComponent.note.isDangerous = true;
+            }
+            FightManager.instance.RegisterNote(noteComponent);
+        }
+
+
+    }
+
+    IEnumerator LaunchSlimeAttack()
+    {
+        spawner.slimeOverlay.SetActive(true);
+        spawner.slimeCanvasGroup.alpha = 1f;
+        yield return new WaitForSeconds(2f);
+
+        float fadeDuration = 1.5f;
+        float timer = 0f;
+
+        while (timer < fadeDuration)
+        {
+            spawner.slimeCanvasGroup.alpha = Mathf.Lerp(1f, 0f, timer / fadeDuration);
+            timer += Time.deltaTime;
+            yield return null;
+        }
+        spawner.slimeCanvasGroup.alpha = 0f;
+        spawner.slimeOverlay.SetActive(false);
+    }
+
+    void LaunchZombieAttack()
+    {
+        //poner la velocidad de la nota en vez de bpm
+        float[] bpmOptions = { 80f, 100f, 120f, 150f, 180f, 200f };
+        float newbpm = bpmOptions[Random.Range(0, bpmOptions.Length)];
+        print($"cambio de BPM a {newbpm}");
+        spawner.songData.bpm = newbpm;
+    }
+    #endregion
+}

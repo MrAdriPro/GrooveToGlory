@@ -10,9 +10,9 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 68ece0860c0693c4aacc0b85b2ed4b93, type: 3}
-  m_Name: EnemyData
+  m_Name: Slime
   m_EditorClassIdentifier: 
-  enemyName: Diego
+  enemyType: 0
   maxHealth: 1000
   songData:
   - {fileID: 11400000, guid: b0059fb0783308f41aa4beac3b397038, type: 2}

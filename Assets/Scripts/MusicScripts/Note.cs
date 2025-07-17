@@ -2,12 +2,11 @@ using UnityEngine;
 
 public class Note : MonoBehaviour
 {
-    public string direction;           // The direction this note represents 
     public float speed = 5f;
     public bool canBePressed = false;
-    public float lifeTime = 5f;
     private float lifeTimer = 0f;
     public bool resolved = false;
+    public Note_SO note;
 
     void Start()
     {
@@ -19,12 +18,13 @@ public class Note : MonoBehaviour
         transform.position += Vector3.down * speed * Time.deltaTime;
 
         lifeTimer += Time.deltaTime;
-        if (lifeTimer >= lifeTime && !resolved)
+        if (lifeTimer >= note.lifeTime && !resolved)
         {
+            resolved = true;
             // If the note could be pressed, count as a miss
             if (canBePressed && FightManager.instance != null)
             {
-                FightManager.instance.MissNote();
+                FightManager.instance.MissNote(this);
             }
 
             // Unregister the note from the GameManager
@@ -40,8 +40,11 @@ public class Note : MonoBehaviour
     {
         if (collision.CompareTag("HitZone"))
         {
-            canBePressed = true; // The note can now be pressed
-            FightManager.instance?.RegisterNote(this); // Register the note as active
+            
+                canBePressed = true; // The note can now be pressed
+                FightManager.instance?.RegisterNote(this); // Register the note as active
+            
+
         }
     }
 
@@ -50,12 +53,18 @@ public class Note : MonoBehaviour
         // If the note leaves the "HitZone" and hasn't been resolved
         if (collision.CompareTag("HitZone") && !resolved)
         {
-            // If it could be pressed, count as a miss
-            if (canBePressed)
-                FightManager.instance?.MissNote();
+            resolved = true;
 
-            canBePressed = false; // The note can no longer be pressed
-            FightManager.instance?.UnregisterNote(this); // Unregister the note
+            if (!note.isDangerous)
+            {
+                if (canBePressed)
+                {
+                    FightManager.instance?.MissNote(this);
+                }
+
+                FightManager.instance?.UnregisterNote(this);
+            }
+
             Destroy(gameObject);
         }
     }

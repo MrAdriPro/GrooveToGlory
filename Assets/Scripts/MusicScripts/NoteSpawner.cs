@@ -1,3 +1,4 @@
+using System.Collections;
 using System.Collections.Generic;
 using UnityEditor.EditorTools;
 using UnityEngine;
@@ -8,6 +9,7 @@ public class NoteSpawner : MonoBehaviour
 
     [Header("Note Prefabs")]
     public GameObject[] notePrefabs = new GameObject[4]; // Array to hold different note prefabs
+    public GameObject boneNotePrefab; 
 
     [Header("Spawn Points")]
     public Transform[] spawnPoints = new Transform[4]; // Array to hold different spawn points for notes
@@ -25,31 +27,47 @@ public class NoteSpawner : MonoBehaviour
 
     [Header("Breaking Song Settings")]
     public bool breakingSong = false;
-    public List<Vector2> breakingPeriods = new List<Vector2>();
-    public List<Vector2> pausePeriods = new List<Vector2>();
     public float songTime = 0f;
     [Header("beat settings")]
     private float[] spectrum = new float[256];
     public AudioSource activeSong;
-    
+
     public float beatTimer = 0f;
     private float secondsPerBeat;
     [HideInInspector]
     public bool canSpawnNotes = false;
     [Header("References")]
     public EnemyData enemyData;
+    [Header("Special attack settings")]
+    private float specialAttackTimer = 0f;
+    public float specialAttackInterval = 5f;
+    public GameObject slimeOverlay;
+    private PlayerHealth player;
+    public CanvasGroup slimeCanvasGroup;
+    private bool skipNextNote = false;
+    public EnemyAttackManager enemyAttackManager;
 
 
     void Start()
     {
+        enemyAttackManager.Initialize(this);
+        player = FindFirstObjectByType<PlayerHealth>();
         secondsPerBeat = 60f / bpm;
     }
 
     void Update()
     {
+        //meterlo en voids 
         if (!canSpawnNotes || activeSong == null) return;
 
         songTime += Time.deltaTime;
+        specialAttackTimer += Time.deltaTime;
+
+        if (specialAttackTimer > specialAttackInterval)
+        {
+            specialAttackTimer = 0;
+            enemyAttackManager.TriggerEnemyEffect();
+        }
 
         if (OnBreak(songTime))
         {
@@ -68,10 +86,16 @@ public class NoteSpawner : MonoBehaviour
         {
             beatTimer -= secondsPerBeat;
             if (OnPause(songTime)) return;
+            if (skipNextNote)
+            {
+                skipNextNote = false;
+                return;
+            }
             AnalyzeSpectrumAndSpawnNote();
         }
     }
-
+    
+    
     public void PlayRandomSong()
     {
         int randomIndex = Random.Range(0, enemyData.songData.Count);
@@ -83,23 +107,23 @@ public class NoteSpawner : MonoBehaviour
 
     private bool OnPause(float currentTime)
     {
-        foreach (Vector2 period in pausePeriods)
+        foreach (Vector2 period in songData.pausePeriods)
         {
             if (currentTime >= period.x && currentTime <= period.y)
             {
-                return true; // Está en un periodo de pausa
+                return true; //is on pause
             }
 
         }
-        return false; // No está en pausa
+        return false; //not pause
     }
     private bool OnBreak(float currentTime)
     {
-        foreach (Vector2 period in breakingPeriods)
+        foreach (Vector2 period in songData.breakingPeriods)
         {
             if (currentTime >= period.x && currentTime <= period.y)
             {
-                return true; // Está en un periodo de pausa
+                return true; // period of pause
             }
 
         }
@@ -119,7 +143,6 @@ public class NoteSpawner : MonoBehaviour
 
         List<Direction> posibleNotes = new List<Direction>();
 
-        // Puedes ajustar el orden o la asignación como quieras
         if (low > thresholds[0])
         {
             posibleNotes.Add(Direction.Left);
@@ -168,11 +191,7 @@ public class NoteSpawner : MonoBehaviour
             {
                 Instantiate(notePrefabs[index], spawnPoints[index].position, Quaternion.identity);
             }
-
         }
-
-
-
         // Debug.Log($"Low: {low}, Mid: {mid}, High: {high}");
     }
 

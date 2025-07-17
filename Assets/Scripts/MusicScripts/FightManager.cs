@@ -14,6 +14,8 @@ public class FightManager : MonoBehaviour
     public EnemyHealth currentEnemy;
     private Player_Movement playerMovement;
     private EnemyRandomMovement enemyRandomMovement;
+    public NoteSpawner noteSpawner;
+
 
     public float damageToEnemy = 10f;
     public float damageToPlayer = 10f;
@@ -23,7 +25,6 @@ public class FightManager : MonoBehaviour
     [BoxGroup("Combat UI")] public Camera combatCamera;
     [BoxGroup("Combat UI")] public GameObject playerPrefab;
     [BoxGroup("Combat UI")] public GameObject enemyPrefab;
-    [BoxGroup("Combat UI")] public NoteSpawner noteSpawner;
     [BoxGroup("Combat UI")] public Image enemyImage;
     [BoxGroup("Combat UI")] public Image playerImage;
     [BoxGroup("Combat UI")] public SpriteRenderer playerPortrait;
@@ -37,17 +38,13 @@ public class FightManager : MonoBehaviour
     private int maxComboReached = 0;
     public float damageMultiplierPerCombo = 1f;
     [SerializeField] private int comboNumberToMultiplyDamage = 10;
+    public float dangerousNoteMultiplier = 100f;
 
     [Header("Song")]
     private AudioSource activeSong;
     private bool combatActive = false;
     public TextMeshProUGUI countdownText;
 
-    [Header("Pixel Art Camera")]
-    public Camera pixelCamera;
-    public RenderTexture pixelRenderTexture;
-    public Vector2Int pixelResolution = new Vector2Int(320, 180);
-    public Vector2Int fullResolution = new Vector2Int(1920, 1080);
 
     private void Awake()
     {
@@ -60,8 +57,8 @@ public class FightManager : MonoBehaviour
     void Start()
     {
         originalFOV = Camera.main.fieldOfView;
-        playerMovement = FindFirstObjectByType<Player_Movement>();
-        enemyRandomMovement = FindFirstObjectByType<EnemyRandomMovement>();
+        playerMovement = GameObject.FindGameObjectWithTag(Tags.PLAYER).GetComponent<Player_Movement>(); ;
+        enemyRandomMovement = GameObject.FindGameObjectWithTag(Tags.ENEMY).GetComponent<EnemyRandomMovement>();
 
 
     }
@@ -91,7 +88,6 @@ public class FightManager : MonoBehaviour
         currentEnemy.SetEnemyData(enemyData);
         noteSpawner.enemyData = enemyData;
 
-        EnablePixelCamera(true);
 
         combatUI.SetActive(true);
         combatCamera.gameObject.SetActive(true);
@@ -119,7 +115,6 @@ public class FightManager : MonoBehaviour
         Camera cam = Camera.main;
         float timer = 0f;
 
-        Debug.Log("Iniciando Zoom");
 
         while (timer < duration / 2)
         {
@@ -185,38 +180,11 @@ public class FightManager : MonoBehaviour
         combatUI.SetActive(false);
         playerPrefab.SetActive(true);
 
-        EnablePixelCamera(false); // VOLVER A LA CÁMARA NORMAL
-
+        noteSpawner.slimeOverlay.SetActive(false);
         combatActive = false;
         combatHasStarted = false;
     }
 
-    private void EnablePixelCamera(bool enable)
-    {
-        if (pixelCamera == null || pixelRenderTexture == null)
-        {
-            Debug.LogError("PixelCamera o PixelRenderTexture no están asignados en el Inspector.");
-            return;
-        }
-
-        // Activar/desactivar las cámaras de forma segura
-        pixelCamera.gameObject.SetActive(enable);
-
-        if (Camera.main != null)
-        {
-            Camera.main.enabled = !enable; // NO desactivar el GameObject, solo la cámara
-        }
-
-        if (enable)
-        {
-            pixelRenderTexture.Release();
-            pixelRenderTexture.width = 320;
-            pixelRenderTexture.height = 180;
-            pixelRenderTexture.Create();
-
-            pixelCamera.targetTexture = pixelRenderTexture;
-        }
-    }
 
 
     public void RegisterNote(Note note) => activeNotes.Add(note);
@@ -227,7 +195,17 @@ public class FightManager : MonoBehaviour
     public void HitNote(Note note)
     {
         if (!note.canBePressed || note.resolved) return;
-
+        if (note.note.isDangerous)
+        {
+            float damageDone = damageToPlayer * dangerousNoteMultiplier;
+            player.TakeDamage(damageDone);
+            print($"daño al player de {damageDone}");
+            note.resolved = true;
+            UnregisterNote(note);
+            Destroy(note.gameObject);
+            currentCombo = 0;
+            return;
+        }
         note.resolved = true;
         UnregisterNote(note);
         Destroy(note.gameObject);
@@ -244,10 +222,14 @@ public class FightManager : MonoBehaviour
         currentEnemy.TakeDamage(finalDamage);
     }
 
-    public void MissNote()
+    public void MissNote(Note note)
     {
+        float damage = damageToPlayer;
+        if (note != null && note.note.isDangerous)
+        {
+            return;
+        }
         player.TakeDamage(damageToPlayer);
-        if (currentCombo > 0)
-            currentCombo = 0;
+        currentCombo = 0;
     }
 }

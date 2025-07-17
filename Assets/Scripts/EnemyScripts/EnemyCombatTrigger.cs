@@ -11,11 +11,14 @@ public class EnemyCombatTrigger : MonoBehaviour
     private EnemyHealth enemyHealth;
     private Player_Movement playerMovement;
     private EnemyRandomMovement enemyRandomMovement;
+    [SerializeField] private float zoomInFOV = 30f;
+    [SerializeField] private float zoomOutFOV = 78f;
+    [SerializeField] private float zoomDuration = 1.5f;
 
     void Start()
     {
-        enemyRandomMovement = FindFirstObjectByType<EnemyRandomMovement>();
-        playerMovement = FindFirstObjectByType<Player_Movement>();
+        enemyRandomMovement = GetComponent<EnemyRandomMovement>();
+        playerMovement = GameObject.FindGameObjectWithTag(Tags.PLAYER).GetComponent<Player_Movement>();
         player = GameObject.FindGameObjectWithTag(Tags.PLAYER_BODY_TAG).GetComponent<Transform>();
         enemyHealth = GetComponent<EnemyHealth>();
     }
@@ -38,7 +41,7 @@ public class EnemyCombatTrigger : MonoBehaviour
             FightManager.instance.currentEnemy = enemyHealth;
 
             // Start the combat
-            FightManager.instance.StartCoroutine(FightManager.instance.ZoomEffectBeforeCombat(78f, 30f, 1.5f, enemyHealth.data));
+            FightManager.instance.StartCoroutine(FightManager.instance.ZoomEffectBeforeCombat(zoomOutFOV, zoomInFOV, zoomDuration, enemyHealth.data));
         }
     }
 }

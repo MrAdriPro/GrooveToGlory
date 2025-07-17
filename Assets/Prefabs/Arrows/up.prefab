@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 4343807865550679000}
   - component: {fileID: 4960918043614249069}
   m_Layer: 0
-  m_Name: UpArrowParent
+  m_Name: up
   m_TagString: Note
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -77,7 +77,7 @@ SpriteRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 506922143
-  m_SortingLayer: 1
+  m_SortingLayer: 2
   m_SortingOrder: 0
   m_Sprite: {fileID: 21300000, guid: 73a701f226495d04688fce5eb03506e6, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -175,8 +175,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dab0f8b5934c7e04caf99b6f82327f36, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  direction: up
   speed: 5
   canBePressed: 0
-  lifeTime: 5
   resolved: 0
+  note: {fileID: 11400000, guid: 4437f4ffc7f0e5149aa858486c8f6a7f, type: 2}
