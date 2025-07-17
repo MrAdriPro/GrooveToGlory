@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class Note : MonoBehaviour
 {
-    public float speed = 5f;
+    public static float speed = 5f;
     public bool canBePressed = false;
     private float lifeTimer = 0f;
     public bool resolved = false;

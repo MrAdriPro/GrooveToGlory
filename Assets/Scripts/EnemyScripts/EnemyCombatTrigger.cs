@@ -18,7 +18,7 @@ public class EnemyCombatTrigger : MonoBehaviour
     void Start()
     {
         enemyRandomMovement = GetComponent<EnemyRandomMovement>();
-        playerMovement = GameObject.FindGameObjectWithTag(Tags.PLAYER).GetComponent<Player_Movement>();
+        playerMovement = FindFirstObjectByType<Player_Movement>();
         player = GameObject.FindGameObjectWithTag(Tags.PLAYER_BODY_TAG).GetComponent<Transform>();
         enemyHealth = GetComponent<EnemyHealth>();
     }

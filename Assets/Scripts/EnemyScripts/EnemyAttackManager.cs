@@ -71,10 +71,10 @@ public class EnemyAttackManager : MonoBehaviour
     void LaunchZombieAttack()
     {
         //poner la velocidad de la nota en vez de bpm
-        float[] bpmOptions = { 80f, 100f, 120f, 150f, 180f, 200f };
-        float newbpm = bpmOptions[Random.Range(0, bpmOptions.Length)];
-        print($"cambio de BPM a {newbpm}");
-        spawner.songData.bpm = newbpm;
+        int[] speedOptions = {  10,  8, 13 };
+        int newspeed = speedOptions[Random.Range(0, speedOptions.Length)];
+        print($"cambio de speed a {newspeed}");
+        Note.speed = newspeed;
     }
     #endregion
 }

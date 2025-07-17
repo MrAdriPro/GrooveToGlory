@@ -13,7 +13,6 @@ public class FightManager : MonoBehaviour
     public PlayerHealth player;
     public EnemyHealth currentEnemy;
     private Player_Movement playerMovement;
-    private EnemyRandomMovement enemyRandomMovement;
     public NoteSpawner noteSpawner;
 
 
@@ -57,8 +56,7 @@ public class FightManager : MonoBehaviour
     void Start()
     {
         originalFOV = Camera.main.fieldOfView;
-        playerMovement = GameObject.FindGameObjectWithTag(Tags.PLAYER).GetComponent<Player_Movement>(); ;
-        enemyRandomMovement = GameObject.FindGameObjectWithTag(Tags.ENEMY).GetComponent<EnemyRandomMovement>();
+        playerMovement = GameObject.FindGameObjectWithTag(Tags.PLAYER).GetComponent<Player_Movement>(); 
 
 
     }
