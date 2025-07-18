@@ -193,7 +193,7 @@ AudioSource:
   m_audioClip: {fileID: 0}
   m_Resource: {fileID: 0}
   m_PlayOnAwake: 0
-  m_Volume: 0.003
+  m_Volume: 0.11
   m_Pitch: 1
   Loop: 0
   Mute: 0
@@ -1633,7 +1633,7 @@ MonoBehaviour:
   activeNotes: []
   damageMultiplierPerCombo: 0.1
   comboNumberToMultiplyDamage: 10
-  dangerousNoteMultiplier: 100
+  dangerousNoteMultiplier: 1000
   countdownText: {fileID: 295279954}
 --- !u!20 &1166865160 stripped
 Camera:

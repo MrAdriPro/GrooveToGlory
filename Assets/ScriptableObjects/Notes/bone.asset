@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bcb2a1aa66a2cb34aac7788aef6e706a, type: 3}
   m_Name: bone
   m_EditorClassIdentifier: 
-  direction: 3
+  direction: 0
   speed: 5
   lifeTime: 5
   isDangerous: 1

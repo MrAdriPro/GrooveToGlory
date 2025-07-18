@@ -44,7 +44,7 @@ public class NoteSpawner : MonoBehaviour
     public GameObject slimeOverlay;
     private PlayerHealth player;
     public CanvasGroup slimeCanvasGroup;
-    private bool skipNextNote = false;
+    public bool skipNextNote = false;
     public EnemyAttackManager enemyAttackManager;
 
 
@@ -58,44 +58,41 @@ public class NoteSpawner : MonoBehaviour
     void Update()
     {
         //meterlo en voids 
-        if (!canSpawnNotes || activeSong == null) return;
+        if (!canSpawnNotes || activeSong == null)
+            return;
 
         songTime += Time.deltaTime;
         specialAttackTimer += Time.deltaTime;
 
         if (specialAttackTimer > specialAttackInterval)
         {
-            specialAttackTimer = 0;
+            specialAttackTimer = 0f;
             enemyAttackManager.TriggerEnemyEffect();
         }
 
-        if (OnBreak(songTime))
-        {
-            secondsPerBeat = 60f / (songData.bpm * 2); // Adjust the beat tempo for breaking song
-            Note_Data.speed = 10;
-        }
-        else
-        {
-            secondsPerBeat = 60f / songData.bpm; // Normal beat tempo
-            Note_Data.speed = 5;
-        }
+        UpdateBeatTime();
+    }
+
+
+    void UpdateBeatTime()
+    {
+        float bpmToUse = OnBreak(songTime) ? songData.bpm * 2 : songData.bpm;
+        secondsPerBeat = 60f / bpmToUse;
+        Note_Data.speed = OnBreak(songTime) ? 10 : 5;
 
         beatTimer += Time.deltaTime;
 
         if (beatTimer >= secondsPerBeat)
         {
             beatTimer -= secondsPerBeat;
+
             if (OnPause(songTime)) return;
-            if (skipNextNote)
-            {
-                skipNextNote = false;
-                return;
-            }
+            if (skipNextNote) { skipNextNote = false; return; }
+
             AnalyzeSpectrumAndSpawnNote();
         }
     }
-    
-    
+
     public void PlayRandomSong()
     {
         int randomIndex = Random.Range(0, enemyData.songData.Count);
@@ -105,30 +102,17 @@ public class NoteSpawner : MonoBehaviour
 
     }
 
-    private bool OnPause(float currentTime)
+    private bool IsInTimeRange(List<Vector2> ranges, float time)
     {
-        foreach (Vector2 period in songData.pausePeriods)
-        {
-            if (currentTime >= period.x && currentTime <= period.y)
-            {
-                return true; //is on pause
-            }
+        foreach (var range in ranges)
+            if (time >= range.x && time <= range.y)
+                return true;
 
-        }
-        return false; //not pause
+        return false;
     }
-    private bool OnBreak(float currentTime)
-    {
-        foreach (Vector2 period in songData.breakingPeriods)
-        {
-            if (currentTime >= period.x && currentTime <= period.y)
-            {
-                return true; // period of pause
-            }
 
-        }
-        return false; // No está en pausa
-    }
+    private bool OnPause(float time) => IsInTimeRange(songData.pausePeriods, time);
+    private bool OnBreak(float time) => IsInTimeRange(songData.breakingPeriods, time);
 
     void AnalyzeSpectrumAndSpawnNote()
     {
@@ -141,51 +125,36 @@ public class NoteSpawner : MonoBehaviour
 
         bool lowThreshold = low > thresholds[0];
 
-        List<Direction> posibleNotes = new List<Direction>();
-
+        List<Direction> availableNotes = new List<Direction>();
         if (low > thresholds[0])
         {
-            posibleNotes.Add(Direction.Left);
-            posibleNotes.Add(Direction.Down);
+            availableNotes.Add(Direction.Left);
+            availableNotes.Add(Direction.Down);
         }
         if (mid > thresholds[1])
         {
-            posibleNotes.Add(Direction.Down);
-            posibleNotes.Add(Direction.Up);
+            availableNotes.Add(Direction.Down);
+            availableNotes.Add(Direction.Up);
         }
         if (high > thresholds[2])
         {
-            posibleNotes.Add(Direction.Up);
-            posibleNotes.Add(Direction.Right);
+            availableNotes.Add(Direction.Up);
+            availableNotes.Add(Direction.Right);
         }
 
-        if (posibleNotes.Count == 0)
+        if (availableNotes.Count == 0)
         {
-            posibleNotes.Add((Direction)Random.Range(0, 4));
+            availableNotes.Add((Direction)Random.Range(0, 4));
         }
 
-        List<Direction> uniqueNotes = new List<Direction>();
-        foreach (Direction dir in posibleNotes)
-        {
-            if (!uniqueNotes.Contains(dir))
-            {
-                uniqueNotes.Add(dir);
-            }
-        }
+        
+        Direction[] notePool = new List<Direction>(availableNotes).ToArray();
+        int notesToSpawn = Random.value < chanceToSpawnDoubleNote && notePool.Length > 1 ? 2 : 1; // Decide whether to spawn one or two notes
 
-        int notesToSpawn = Random.value < chanceToSpawnDoubleNote && uniqueNotes.Count > 1 ? 2 : 1; // Decide whether to spawn one or two notes
 
-        List<Direction> finalNotes = new List<Direction>();
-        while (finalNotes.Count < notesToSpawn)
+        for (int i = 0; i < notesToSpawn; i++)
         {
-            Direction note = uniqueNotes[Random.Range(0, uniqueNotes.Count)];
-            if (!finalNotes.Contains(note))
-            {
-                finalNotes.Add(note);
-            }
-        }
-        foreach (Direction note in finalNotes)
-        {
+            Direction note = notePool[Random.Range(0, notePool.Length)];
             int index = (int)note;
             if (notePrefabs[index] != null && spawnPoints[index] != null)
             {

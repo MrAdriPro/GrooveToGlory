@@ -63,18 +63,21 @@ public class FightManager : MonoBehaviour
 
     private void Update()
     {
-        if (combatActive)
-        {
-            if (player != null && playerHealthBar.maxValue == player.maxHealth)
-                playerHealthBar.value = Mathf.Lerp(playerHealthBar.value, player.currentHealth, Time.deltaTime * lerpSpeed);
+        if (!combatActive) return;
 
-            if (currentEnemy != null && enemyHealthBar.maxValue == currentEnemy.data.maxHealth)
-                enemyHealthBar.value = Mathf.Lerp(enemyHealthBar.value, currentEnemy.currentHealth, Time.deltaTime * lerpSpeed);
-
-            if (!activeSong.isPlaying)
-                EndCombat();
-        }
+        UpdateHealthBars();
+        if (!activeSong.isPlaying)
+            EndCombat();
     }
+    void UpdateHealthBars()
+    {
+        if (playerHealthBar.maxValue == player.maxHealth)
+            playerHealthBar.value = Mathf.Lerp(playerHealthBar.value, player.currentHealth, Time.deltaTime * lerpSpeed);
+
+        if (enemyHealthBar.maxValue == currentEnemy.data.maxHealth)
+            enemyHealthBar.value = Mathf.Lerp(enemyHealthBar.value, currentEnemy.currentHealth, Time.deltaTime * lerpSpeed);
+    }
+
 
     public void StartCombat(EnemyData enemyData)
     {
@@ -198,10 +201,9 @@ public class FightManager : MonoBehaviour
             float damageDone = damageToPlayer * dangerousNoteMultiplier;
             player.TakeDamage(damageDone);
             print($"daño al player de {damageDone}");
-            note.resolved = true;
-            UnregisterNote(note);
-            Destroy(note.gameObject);
             currentCombo = 0;
+            Destroy(note.gameObject);
+            UnregisterNote(note);
             return;
         }
         note.resolved = true;
@@ -222,11 +224,9 @@ public class FightManager : MonoBehaviour
 
     public void MissNote(Note note)
     {
-        float damage = damageToPlayer;
         if (note != null && note.note.isDangerous)
-        {
             return;
-        }
+
         player.TakeDamage(damageToPlayer);
         currentCombo = 0;
     }

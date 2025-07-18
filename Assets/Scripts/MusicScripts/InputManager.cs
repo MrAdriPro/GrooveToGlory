@@ -11,6 +11,8 @@ public class InputManager : MonoBehaviour
 
     void Update()
     {
+        //lo que pasa que la del esqueleto solo funciona con la direccion que le pongas 
+        //TODO: Flecha esqueleto que cambie en la dirección en la que spawnee
         if (Input.GetKeyDown(leftKey)) CheckNote(NoteDirection.Left);
         if (Input.GetKeyDown(downKey)) CheckNote(NoteDirection.Down);
         if (Input.GetKeyDown(upKey)) CheckNote(NoteDirection.Up);
@@ -19,24 +21,16 @@ public class InputManager : MonoBehaviour
 
     void CheckNote(NoteDirection dir)
     {
-        bool hit = false;
         foreach (Note note in FightManager.instance.activeNotes)
         {
-            if (note.note.direction == dir)
+            if (note.note.direction == dir && note.canBePressed && !note.resolved)
             {
-                if (note.canBePressed && !note.resolved)
-                {
-                    FightManager.instance.HitNote(note);
-                    hit = true;
-                    break;
-                }
+                FightManager.instance.HitNote(note);
+                return;
             }
         }
 
-        if (!hit)
-        {
-            Debug.Log("Fallaste la nota");
-            FightManager.instance.MissNote(null);
-        }
+        FightManager.instance.MissNote(null);
     }
+
 }
