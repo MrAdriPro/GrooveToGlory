@@ -195,6 +195,7 @@ public class FightManager : MonoBehaviour
 
     public void HitNote(Note note)
     {
+        if (!combatActive) return;
         if (!note.canBePressed || note.resolved) return;
         if (note.note.isDangerous)
         {
@@ -224,6 +225,7 @@ public class FightManager : MonoBehaviour
 
     public void MissNote(Note note)
     {
+        if(!combatActive) return;
         if (note != null && note.note.isDangerous)
             return;
 

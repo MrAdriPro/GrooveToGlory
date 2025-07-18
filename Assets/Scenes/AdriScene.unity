@@ -1587,6 +1587,7 @@ MonoBehaviour:
   specialAttackInterval: 5
   slimeOverlay: {fileID: 1768266299}
   slimeCanvasGroup: {fileID: 1768266304}
+  nextNoteIsBone: 0
   enemyAttackManager: {fileID: 36788139}
 --- !u!4 &1152886098
 Transform:
@@ -3083,7 +3084,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4950514920627779564, guid: 3f4db9510608c7c4c9e4c48e2b4b6508, type: 3}
       propertyPath: maxHealth
-      value: 1000
+      value: 200
       objectReference: {fileID: 0}
     - target: {fileID: 5218088607154104779, guid: 3f4db9510608c7c4c9e4c48e2b4b6508, type: 3}
       propertyPath: m_AllowXRRendering

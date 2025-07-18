@@ -8,7 +8,7 @@ public class Note_SO : ScriptableObject
     public float lifeTime = 5f;
     public bool isDangerous = false;
 }
-public enum NoteDirection
+public enum NoteDirection : byte
 {
     Left,
     Right,

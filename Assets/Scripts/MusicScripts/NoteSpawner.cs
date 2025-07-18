@@ -42,16 +42,15 @@ public class NoteSpawner : MonoBehaviour
     private float specialAttackTimer = 0f;
     public float specialAttackInterval = 5f;
     public GameObject slimeOverlay;
-    private PlayerHealth player;
     public CanvasGroup slimeCanvasGroup;
-    public bool skipNextNote = false;
+    [HideInInspector]  
+    public bool nextNoteIsBone = false;
     public EnemyAttackManager enemyAttackManager;
 
 
     void Start()
     {
         enemyAttackManager.Initialize(this);
-        player = FindFirstObjectByType<PlayerHealth>();
         secondsPerBeat = 60f / bpm;
     }
 
@@ -87,7 +86,6 @@ public class NoteSpawner : MonoBehaviour
             beatTimer -= secondsPerBeat;
 
             if (OnPause(songTime)) return;
-            if (skipNextNote) { skipNextNote = false; return; }
 
             AnalyzeSpectrumAndSpawnNote();
         }
@@ -158,7 +156,33 @@ public class NoteSpawner : MonoBehaviour
             int index = (int)note;
             if (notePrefabs[index] != null && spawnPoints[index] != null)
             {
-                Instantiate(notePrefabs[index], spawnPoints[index].position, Quaternion.identity);
+                GameObject prefabToUse = nextNoteIsBone ? boneNotePrefab : notePrefabs[index];
+                GameObject noteGO = Instantiate(prefabToUse, spawnPoints[index].position, Quaternion.identity);
+
+                if (noteGO.TryGetComponent<Note>(out var noteComponent))
+                {
+                    if(nextNoteIsBone)
+                        noteComponent.note.isDangerous = true;
+
+                    switch (index)
+                    {
+                        case 0:
+                            noteComponent.note.direction = NoteDirection.Down;
+                            break;
+                        case 1:
+                            noteComponent.note.direction = NoteDirection.Up;
+                            break;
+                        case 2:
+                            noteComponent.note.direction = NoteDirection.Left;
+                            break;
+                        case 3:
+                            noteComponent.note.direction = NoteDirection.Right;
+                            break;
+                    }
+                }
+
+                nextNoteIsBone = false;
+
             }
         }
         // Debug.Log($"Low: {low}, Mid: {mid}, High: {high}");

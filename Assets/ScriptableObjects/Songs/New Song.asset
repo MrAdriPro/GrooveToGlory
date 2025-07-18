@@ -14,5 +14,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   song: {fileID: 8300000, guid: 03bfb97e4a1ac6c4e9670384871e7917, type: 3}
   bpm: 130
-  breakingPeriods: []
+  breakingPeriods:
+  - {x: 0, y: 0}
   pausePeriods: []
