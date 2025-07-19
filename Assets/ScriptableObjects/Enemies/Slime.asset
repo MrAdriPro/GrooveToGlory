@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 68ece0860c0693c4aacc0b85b2ed4b93, type: 3}
   m_Name: Slime
   m_EditorClassIdentifier: 
-  enemyType: 2
+  enemyType: 1
   maxHealth: 1000
   songData:
   - {fileID: 11400000, guid: b0059fb0783308f41aa4beac3b397038, type: 2}

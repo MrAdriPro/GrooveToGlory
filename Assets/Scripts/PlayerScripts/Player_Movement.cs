@@ -96,7 +96,6 @@ public class Player_Movement : MonoBehaviour
         // Guardar la dirección final para mover al personaje
         movement = direction;
 
-        Debug.Log($"H: {h}, V: {v}");
     }
 
 }

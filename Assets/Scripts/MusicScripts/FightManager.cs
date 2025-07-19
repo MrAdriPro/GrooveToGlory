@@ -28,7 +28,7 @@ public class FightManager : MonoBehaviour
     [BoxGroup("Combat UI")] public Image playerImage;
     [BoxGroup("Combat UI")] public SpriteRenderer playerPortrait;
     [BoxGroup("Combat UI")] public Slider enemyHealthBar;
-    [BoxGroup("Combat UI")] public Slider playerHealthBar;
+    [BoxGroup("Combat UI")] public Slider playerCombatHealthBar;
     float originalFOV;
 
     public float lerpSpeed = 5f;
@@ -56,8 +56,7 @@ public class FightManager : MonoBehaviour
     void Start()
     {
         originalFOV = Camera.main.fieldOfView;
-        playerMovement = GameObject.FindGameObjectWithTag(Tags.PLAYER).GetComponent<Player_Movement>(); 
-
+        playerMovement = GameObject.FindGameObjectWithTag(Tags.PLAYER).GetComponent<Player_Movement>();
 
     }
 
@@ -71,12 +70,15 @@ public class FightManager : MonoBehaviour
     }
     void UpdateHealthBars()
     {
-        if (playerHealthBar.maxValue == player.maxHealth)
-            playerHealthBar.value = Mathf.Lerp(playerHealthBar.value, player.currentHealth, Time.deltaTime * lerpSpeed);
+        playerCombatHealthBar.value = Mathf.Lerp(playerCombatHealthBar.value, player.currentHealth, Time.deltaTime * lerpSpeed);
+        GameController.instance.worldHealthBar.value = Mathf.Lerp(GameController.instance.worldHealthBar.value, player.currentHealth, Time.deltaTime * lerpSpeed);
 
         if (enemyHealthBar.maxValue == currentEnemy.data.maxHealth)
             enemyHealthBar.value = Mathf.Lerp(enemyHealthBar.value, currentEnemy.currentHealth, Time.deltaTime * lerpSpeed);
     }
+
+
+
 
 
     public void StartCombat(EnemyData enemyData)
@@ -95,8 +97,10 @@ public class FightManager : MonoBehaviour
         noteSpawner.gameObject.SetActive(true);
         combatActive = true;
 
-        playerHealthBar.maxValue = player.maxHealth;
-        playerHealthBar.value = player.currentHealth;
+        float startingHealth = GameController.instance.worldHealthBar.value;
+        player.currentHealth = startingHealth;
+        playerCombatHealthBar.maxValue = player.maxHealth;
+        playerCombatHealthBar.value = player.currentHealth;
 
         enemyHealthBar.maxValue = enemyData.maxHealth;
         enemyHealthBar.value = enemyData.maxHealth;
@@ -188,15 +192,44 @@ public class FightManager : MonoBehaviour
 
 
 
+    /// <summary>
+    /// Adds a note to the list of currently active notes in the fight.
+    /// </summary>
     public void RegisterNote(Note note) => activeNotes.Add(note);
+
+    /// <summary>
+    /// Removes a note from the list of active notes.
+    /// Called when a note is hit or missed and should no longer be interactable.
+    /// </summary>
     public void UnregisterNote(Note note) => activeNotes.Remove(note);
+
+    /// <summary>
+    /// Returns the current combo count (number of consecutive successful hits).
+    /// </summary>
     public int GetCurrentCombo() => currentCombo;
+
+    /// <summary>
+    /// Returns the highest combo reached during the current fight.
+    /// </summary>
     public int GetMaxCombo() => maxComboReached;
 
+    /// <summary>
+    /// Returns true if combat is currently active.
+    /// </summary>
+    public bool IsCombatActive() => combatActive;
+
+    /// <summary>
+    /// Called when the player successfully hits a note.
+    /// Handles dangerous notes, combo logic, and damage calculation.
+    /// </summary>
     public void HitNote(Note note)
     {
+        // Ignore if combat is not active
         if (!combatActive) return;
+        // Ignore if note can't be pressed or was already resolved
         if (!note.canBePressed || note.resolved) return;
+
+        // If the note is dangerous, deal heavy damage to player and reset combo
         if (note.note.isDangerous)
         {
             float damageDone = damageToPlayer * dangerousNoteMultiplier;
@@ -207,15 +240,20 @@ public class FightManager : MonoBehaviour
             UnregisterNote(note);
             return;
         }
+
+        // Mark note as resolved and remove from active notes
         note.resolved = true;
         UnregisterNote(note);
         Destroy(note.gameObject);
 
+        // Increase combo count
         currentCombo++;
 
+        // Update max combo if needed
         if (currentCombo > maxComboReached)
             maxComboReached = currentCombo;
 
+        // Calculate damage with combo multiplier
         float multiplier = 1 + (currentCombo / comboNumberToMultiplyDamage) * damageMultiplierPerCombo;
         float finalDamage = damageToEnemy * multiplier;
 
@@ -223,12 +261,20 @@ public class FightManager : MonoBehaviour
         currentEnemy.TakeDamage(finalDamage);
     }
 
+    /// <summary>
+    /// Called when the player misses a note.
+    /// If the note is dangerous, missing does nothing (handled in HitNote).
+    /// Otherwise, deals damage to the player and resets combo.
+    /// </summary>
     public void MissNote(Note note)
     {
+        // Ignore if combat is not active
         if(!combatActive) return;
+        // Missing a dangerous note does nothing
         if (note != null && note.note.isDangerous)
             return;
 
+        // Deal damage to player and reset combo
         player.TakeDamage(damageToPlayer);
         currentCombo = 0;
     }

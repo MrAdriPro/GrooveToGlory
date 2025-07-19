@@ -91,15 +91,22 @@ public class NoteSpawner : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Picks a random song from the enemy's song list and sets it as the active song.
+    /// Also updates the songData reference for spectrum analysis and timing.
+    /// </summary>
     public void PlayRandomSong()
     {
         int randomIndex = Random.Range(0, enemyData.songData.Count);
         activeSong.clip = enemyData.songData[randomIndex].song;
         songData = enemyData.songData[randomIndex];
         Debug.Log($"Playing song: {activeSong.clip.name}");
-
     }
 
+    /// <summary>
+    /// Checks if the current time is within any of the provided time ranges.
+    /// Used for pause and break periods in the song.
+    /// </summary>
     private bool IsInTimeRange(List<Vector2> ranges, float time)
     {
         foreach (var range in ranges)
@@ -109,20 +116,35 @@ public class NoteSpawner : MonoBehaviour
         return false;
     }
 
+    /// <summary>
+    /// Returns true if the current song time is within a pause period.
+    /// Notes should not spawn during pauses.
+    /// </summary>
     private bool OnPause(float time) => IsInTimeRange(songData.pausePeriods, time);
+
+    /// <summary>
+    /// Returns true if the current song time is within a break period.
+    /// Breaks can affect BPM and note speed.
+    /// </summary>
     private bool OnBreak(float time) => IsInTimeRange(songData.breakingPeriods, time);
 
+    /// <summary>
+    /// Analyzes the audio spectrum and spawns notes based on frequency thresholds.
+    /// Picks note directions based on low/mid/high frequency energy.
+    /// Can spawn double notes if conditions are met.
+    /// Handles dangerous notes.
+    /// </summary>
     void AnalyzeSpectrumAndSpawnNote()
     {
-        float random = Random.Range(0, 10); // Randomly choose a note type to spawn
+        float random = Random.Range(0, 10); // Used for random note selection
         activeSong.GetSpectrumData(spectrum, 0, FFTWindow.BlackmanHarris);
 
+        // Analyze frequency bands
         float low = spectrum[1] + spectrum[2];
         float mid = spectrum[15] + spectrum[20];
         float high = spectrum[50] + spectrum[60];
 
-        bool lowThreshold = low > thresholds[0];
-
+        // Build list of possible note directions based on thresholds
         List<Direction> availableNotes = new List<Direction>();
         if (low > thresholds[0])
         {
@@ -140,15 +162,15 @@ public class NoteSpawner : MonoBehaviour
             availableNotes.Add(Direction.Right);
         }
 
+        // If no frequency is strong enough, pick a random direction
         if (availableNotes.Count == 0)
         {
             availableNotes.Add((Direction)Random.Range(0, 4));
         }
 
-        
+        // Decide whether to spawn one or two notes
         Direction[] notePool = new List<Direction>(availableNotes).ToArray();
-        int notesToSpawn = Random.value < chanceToSpawnDoubleNote && notePool.Length > 1 ? 2 : 1; // Decide whether to spawn one or two notes
-
+        int notesToSpawn = Random.value < chanceToSpawnDoubleNote && notePool.Length > 1 ? 2 : 1;
 
         for (int i = 0; i < notesToSpawn; i++)
         {
@@ -156,9 +178,11 @@ public class NoteSpawner : MonoBehaviour
             int index = (int)note;
             if (notePrefabs[index] != null && spawnPoints[index] != null)
             {
+                // Use boneNotePrefab if nextNoteIsBone is set, otherwise use normal prefab
                 GameObject prefabToUse = nextNoteIsBone ? boneNotePrefab : notePrefabs[index];
                 GameObject noteGO = Instantiate(prefabToUse, spawnPoints[index].position, Quaternion.identity);
 
+                // Set note properties (dangerous, direction)
                 if (noteGO.TryGetComponent<Note>(out var noteComponent))
                 {
                     if(nextNoteIsBone)
@@ -182,12 +206,11 @@ public class NoteSpawner : MonoBehaviour
                 }
 
                 nextNoteIsBone = false;
-
             }
         }
-        // Debug.Log($"Low: {low}, Mid: {mid}, High: {high}");
     }
 
+  
     public float RoundToOneDecimal(float number) => (float)System.Math.Round(number, 1);
 
 }
