@@ -18,11 +18,7 @@ public static class Extensions
     public static GameObject slotChecking = null;
     public static bool useMenuActive = false;
 
-    public static void SetcellConfigFromItem(this Room_cell cell, Room room)
-    {
-        cell.id = room.roomId;
-        cell.roomName = room.roomName;
-    }
+    
     public static float DistanceSquared(Vector3 a, Vector3 b)
     {
         return (a.x - b.x) * (a.x - b.x) +

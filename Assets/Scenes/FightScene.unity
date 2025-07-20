@@ -697,7 +697,7 @@ GameObject:
   m_Component:
   - component: {fileID: 273511425}
   m_Layer: 0
-  m_Name: '@UI AND OTHERS'
+  m_Name: $$$$$UI AND OTHERS
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -949,7 +949,7 @@ GameObject:
   m_Component:
   - component: {fileID: 449592843}
   m_Layer: 0
-  m_Name: ///FIGHT AND ENEMIES
+  m_Name: $$$FIGHT AND ENEMIES
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1748,7 +1748,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1140103380}
   m_Layer: 0
-  m_Name: //MAP AND TRAPS
+  m_Name: $$$$$$MAP AND TRAPS
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2385,7 +2385,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1497744640}
   m_Layer: 0
-  m_Name: $PLAYER
+  m_Name: $$PLAYER
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3006,7 +3006,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &1920523847
 Transform:
   m_ObjectHideFlags: 0
@@ -3111,6 +3111,42 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c314da6bca25683479c8deadce02a899, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &2012401995
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2012401988}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a7d13bab3bd7cb7428a58a4bd3d2f92a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  mouseSens: 100
+  smoothRot: 0
+  camOffset: {x: 0, y: 0, z: 0}
+  playerCamPivot: {fileID: 0}
+  playerCam: {fileID: 0}
+  playerBody: {fileID: 0}
+--- !u!114 &2012401996
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2012401988}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 81417a91fce49bd4990daa538d1b9a70, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  speed: 5
+  ChanceTags: 0
+  camTag: MainCamera
+  playerBodyTag: PlayerBody
+  playerCam: {fileID: 0}
+  playerBody: {fileID: 0}
 --- !u!1 &2028863017
 GameObject:
   m_ObjectHideFlags: 0
@@ -3328,7 +3364,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &2094036972
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3417,7 +3453,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2107187073}
   m_Layer: 0
-  m_Name: '#MANAGERS'
+  m_Name: $$$$MANAGERS
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3725,10 +3761,18 @@ PrefabInstance:
       propertyPath: m_TargetTexture
       value: 
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 3654540372162426792, guid: 3f4db9510608c7c4c9e4c48e2b4b6508, type: 3}
+    - {fileID: 5071444911310954033, guid: 3f4db9510608c7c4c9e4c48e2b4b6508, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 5662043589200075343, guid: 3f4db9510608c7c4c9e4c48e2b4b6508, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 2012401996}
+    - targetCorrespondingSourceObject: {fileID: 5662043589200075343, guid: 3f4db9510608c7c4c9e4c48e2b4b6508, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 2012401995}
   m_SourcePrefab: {fileID: 100100000, guid: 3f4db9510608c7c4c9e4c48e2b4b6508, type: 3}
 --- !u!1001 &6280806415223248277
 PrefabInstance:

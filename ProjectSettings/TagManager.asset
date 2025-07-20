@@ -15,6 +15,10 @@ TagManager:
   - FxTemporaire
   - Chest
   - PauseMenu
+  - Note
+  - HitZone
+  - Enemy
+  - EnemyBody
   layers:
   - Default
   - TransparentFX
@@ -54,6 +58,12 @@ TagManager:
     locked: 0
   - name: FloatingText
     uniqueID: 2620161409
+    locked: 0
+  - name: Background
+    uniqueID: 3198036515
+    locked: 0
+  - name: Foreground
+    uniqueID: 4261956241
     locked: 0
   m_RenderingLayers:
   - Default

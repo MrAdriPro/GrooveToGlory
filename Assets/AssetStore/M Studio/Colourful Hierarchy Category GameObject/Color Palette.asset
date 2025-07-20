@@ -38,6 +38,16 @@ MonoBehaviour:
     backgroundColor: {r: 0.5903926, g: 0.12967247, b: 0.8867924, a: 1}
     textAlignment: 4
     fontStyle: 0
+  - keyChar: $$
+    textColor: {r: 0, g: 0, b: 0, a: 1}
+    backgroundColor: {r: 0.7092827, g: 0.9339623, b: 0.8884462, a: 1}
+    textAlignment: 4
+    fontStyle: 3
+  - keyChar: $$$
+    textColor: {r: 0, g: 0, b: 0, a: 1}
+    backgroundColor: {r: 0.9056604, g: 0.24092156, b: 0.2007832, a: 1}
+    textAlignment: 4
+    fontStyle: 3
   - keyChar: --
     textColor: {r: 0, g: 0, b: 0, a: 1}
     backgroundColor: {r: 0.53287876, g: 0.8862745, b: 0.12941174, a: 1}
@@ -48,3 +58,18 @@ MonoBehaviour:
     backgroundColor: {r: 0.8976778, g: 1, b: 0.7783019, a: 1}
     textAlignment: 3
     fontStyle: 0
+  - keyChar: $$$$
+    textColor: {r: 0, g: 0, b: 0, a: 1}
+    backgroundColor: {r: 0.78496957, g: 0.5990566, b: 1, a: 1}
+    textAlignment: 4
+    fontStyle: 3
+  - keyChar: $$$$$
+    textColor: {r: 0, g: 0, b: 0, a: 1}
+    backgroundColor: {r: 0.9150943, g: 0.901532, b: 0.58272517, a: 1}
+    textAlignment: 4
+    fontStyle: 3
+  - keyChar: $$$$$$
+    textColor: {r: 0, g: 0, b: 0, a: 1}
+    backgroundColor: {r: 0.58431375, g: 0.9137255, b: 0.6730855, a: 1}
+    textAlignment: 4
+    fontStyle: 3
