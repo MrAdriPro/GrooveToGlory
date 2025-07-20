@@ -5,11 +5,6 @@ public class Trap : MonoBehaviour
     public TrapData data; // Data describing the trap's properties
     public ScriptableObject trapEffect; // Reference to the ScriptableObject implementing ITrapEffect
 
-    private void Start()
-    {
-        
-    }
-
     private void OnTriggerEnter(Collider other)
     {
         if (other.CompareTag(Tags.PLAYER_BODY_TAG))

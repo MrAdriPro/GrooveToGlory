@@ -483,6 +483,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Trap
       objectReference: {fileID: 0}
+    - target: {fileID: 100000, guid: 18248dcdaf98ac345b877b6b093a4a24, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: 18248dcdaf98ac345b877b6b093a4a24, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -1744,7 +1748,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1140103380}
   m_Layer: 0
-  m_Name: //MAP
+  m_Name: //MAP AND TRAPS
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2554,7 +2558,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1736680358}
   m_Layer: 0
-  m_Name: Spawners
+  m_Name: ?Spawners
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3308,6 +3312,58 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 5942655847604991269, guid: d1fdc6a2baaef2442a9c0649264929c8, type: 3}
   m_PrefabInstance: {fileID: 6280806415223248277}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &2094036971
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2094036973}
+  - component: {fileID: 2094036972}
+  m_Layer: 0
+  m_Name: Grid
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &2094036972
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2094036971}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a7dd98a22b3a329428004c41fc7426e6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  rows: 5
+  columns: 5
+  spacing: 2
+  startRoom: {fileID: 8475263236770286820, guid: 67967731b9c160b489db36746aa61ce4, type: 3}
+  room: {fileID: 8475263236770286820, guid: c1e901528ad565847bd4d42e30b9af28, type: 3}
+  noPathRoom: {fileID: 8475263236770286820, guid: 2a6f150f133331842ad4e8463849b6ee, type: 3}
+  bossRoom: {fileID: 8475263236770286820, guid: f2ddf1a351c557443bcf10b4b47e07a3, type: 3}
+  data: {fileID: 11400000, guid: 22257cf7bbd47704caeef8dd935e765e, type: 2}
+--- !u!4 &2094036973
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2094036971}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -0.70412, y: 2.04, z: -0.18259}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &2105240705 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 6050372962411554083, guid: 3202b652f75ba93468ecdf1c9e07293f, type: 3}
@@ -3812,3 +3868,4 @@ SceneRoots:
   - {fileID: 1140103380}
   - {fileID: 272897196}
   - {fileID: 198701679}
+  - {fileID: 2094036973}
